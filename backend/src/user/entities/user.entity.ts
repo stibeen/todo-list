@@ -1,4 +1,9 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, registerEnumType } from '@nestjs/graphql';
+import { Role } from 'src/generated/enums';
+
+registerEnumType(Role, {
+  name: 'Role',
+});
 
 @ObjectType()
 export class User {
@@ -7,6 +12,9 @@ export class User {
 
   @Field()
   username: string;
+
+  @Field(() => Role, {nullable: true})
+  role: Role;
 
   @Field({nullable: true})
   createdAt: Date;

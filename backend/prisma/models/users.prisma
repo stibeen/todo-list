@@ -1,6 +1,12 @@
 model User {
     id        String   @id @default(uuid())
     username  String   @unique
+    role      Role     @default(USER)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+enum Role {
+    ADMIN
+    USER
 }

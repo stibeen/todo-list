@@ -17,8 +17,14 @@ scalar DateTime
 type User {
   id: String!
   username: String!
+  role: Role
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+enum Role {
+  ADMIN
+  USER
 }
 
 type Query {
@@ -48,9 +54,11 @@ input UpdateTaskInput {
 
 input CreateUserInput {
   username: String!
+  role: Role
 }
 
 input UpdateUserInput {
   username: String
+  role: Role
   id: String!
 }
