@@ -6,6 +6,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { TaskModule } from './task/task.module';
 import { PrismaService } from './prisma/prisma.service';
 import { ConfigModule } from '@nestjs/config';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ConfigModule } from '@nestjs/config';
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
     TaskModule,
+    UserModule,
   ],
   providers: [PrismaService],
 })
