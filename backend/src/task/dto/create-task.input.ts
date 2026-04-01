@@ -6,5 +6,5 @@ export class CreateTaskInput {
   title: string;
 
   @Field({nullable: true})
-  isFinished: boolean;
+  isFinished?: boolean;
 }

@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { TaskService } from './task.service';
-import { Task } from './entities/task.entity';
+import { Task, TaskList, TaskResponse } from './entities/task.entity';
 import { CreateTaskInput } from './dto/create-task.input';
 import { UpdateTaskInput } from './dto/update-task.input';
 
@@ -8,18 +8,21 @@ import { UpdateTaskInput } from './dto/update-task.input';
 export class TaskResolver {
   constructor(private readonly taskService: TaskService) {}
 
-  @Mutation(() => Task)
-  createTask(@Args('createTaskInput') createTaskInput: CreateTaskInput) {
-    return this.taskService.create(createTaskInput);
+  @Mutation(() => TaskResponse)
+  createTask(
+    @Args('createTaskInput') createTaskInput: CreateTaskInput,
+    @Args('userId') userId: string
+  ) {
+    return this.taskService.create(userId, createTaskInput);
   }
 
-  @Query(() => [Task], { name: 'task' })
-  findAll() {
+  @Query(() => TaskList)
+  findAllTask() {
     return this.taskService.findAll();
   }
 
-  @Query(() => Task, { name: 'task' })
-  findOne(@Args('id', { type: () => String }) id: string) {
+  @Query(() => Task)
+  findOneTask(@Args('id', { type: () => String }) id: string) {
     return this.taskService.findOne(id);
   }
 
@@ -31,5 +34,10 @@ export class TaskResolver {
   @Mutation(() => Task)
   removeTask(@Args('id', { type: () => String }) id: string) {
     return this.taskService.remove(id);
+  }
+
+  @Mutation(() => TaskResponse)
+  removeAllTask() {
+    return this.taskService.removeAll();
   }
 }

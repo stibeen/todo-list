@@ -7,23 +7,51 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class TaskService {
   constructor(private prisma: PrismaService) {}
 
-  create(createTaskInput: CreateTaskInput) {
-    return this.prisma.task.create({ data: createTaskInput });
+  async create(userId: string, createTaskInput: CreateTaskInput) {
+      const createTask = await this.prisma.task.create({
+        data: {
+          title: createTaskInput.title,
+          authorId: userId,
+        },
+      });
+
+    return {
+      success: true,
+      message: 'Task created successfully',
+      task: createTask,
+    }
   }
 
-  findAll() {
-    return this.prisma.task.findMany();
+  async findAll() {
+    const [tasks, count] = await this.prisma.$transaction([
+      this.prisma.task.findMany({include: {author: true}}),
+      this.prisma.task.count()
+    ])
+    return {
+      tasks: tasks,
+      count: count,
+      message: 'Tasks fetched successfully',
+    };
   }
 
-  findOne(id: string) {
-    return this.prisma.task.findUnique({ where: { id } });
+  async findOne(id: string) {
+    return await this.prisma.task.findUnique({ where: { id }, include: { author: true } });
   }
 
-  update(id: string, updateTaskInput: UpdateTaskInput) {
-    return this.prisma.task.update({ where: { id }, data: updateTaskInput });
+  async update(id: string, updateTaskInput: UpdateTaskInput) {
+    return await this.prisma.task.update({ where: { id }, data: updateTaskInput });
   }
 
-  remove(id: string) {
-    return this.prisma.task.delete({ where: { id } });
+  async remove(id: string) {
+    return await this.prisma.task.delete({ where: { id } });
+  }
+
+  async removeAll() {
+    const removeAll = await this.prisma.task.deleteMany();
+    return {
+      success: true,
+      message: 'All tasks removed successfully',
+      tasks: removeAll,
+    }
   }
 }

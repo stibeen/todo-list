@@ -7,31 +7,43 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UserService {
   constructor (private prisma: PrismaService) {}
 
-  create(createUserInput: CreateUserInput) {
-    return this.prisma.user.create({
+  async create(createUserInput: CreateUserInput) {
+    return await this.prisma.user.create({
       data: createUserInput,
     });
   }
 
-  findAll() {
-    return this.prisma.user.findMany();
+  async findAll() {
+  const [users, totalUser] = await this.prisma.$transaction([
+    this.prisma.user.findMany({include: {tasks: true}}),
+    this.prisma.user.count()
+  ]);
+    return {
+      users: users,
+      total: totalUser,
+      success: true,
+      message: 'Users fetched successfully',
+    }
   }
 
-  findOne(id: string) {
-    return this.prisma.user.findUnique({
+  async findOne(id: string) {
+    return await this.prisma.user.findUnique({
       where: { id },
+      include: {
+        tasks: true,
+      },
     });
   }
 
-  update(id: string, updateUserInput: UpdateUserInput) {
-    return this.prisma.user.update({
+  async update(id: string, updateUserInput: UpdateUserInput) {
+    return await this.prisma.user.update({
       where: { id },
       data: updateUserInput,
     });
   }
 
-  remove(id: string) {
-    return this.prisma.user.delete({
+  async remove(id: string) {
+    return await this.prisma.user.delete({
       where: { id },
     });
   }
