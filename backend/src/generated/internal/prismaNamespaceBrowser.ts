@@ -86,6 +86,8 @@ export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof Task
 export const UserScalarFieldEnum = {
   id: 'id',
   username: 'username',
+  hashedPassword: 'hashedPassword',
+  hashedRefreshToken: 'hashedRefreshToken',
   role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

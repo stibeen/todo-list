@@ -7,6 +7,10 @@ import { TaskModule } from './task/task.module';
 import { PrismaService } from './prisma/prisma.service';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
+import { RolesGuard } from './common/guards/roles.guard';
 
 @Module({
   imports: [
@@ -21,7 +25,12 @@ import { UserModule } from './user/user.module';
     }),
     TaskModule,
     UserModule,
+    AuthModule,
   ],
-  providers: [PrismaService],
+  providers: [
+    PrismaService,
+    { provide: APP_GUARD, useClass: JwtAuthGuard,},
+    { provide: APP_GUARD, useClass: RolesGuard,},
+  ],
 })
 export class AppModule {}

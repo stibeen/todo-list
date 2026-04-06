@@ -7,12 +7,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UserService {
   constructor (private prisma: PrismaService) {}
 
-  async create(createUserInput: CreateUserInput) {
-    return await this.prisma.user.create({
-      data: createUserInput,
-    });
-  }
-
   async findAll() {
   const [users, totalUser] = await this.prisma.$transaction([
     this.prisma.user.findMany({include: {tasks: true}}),

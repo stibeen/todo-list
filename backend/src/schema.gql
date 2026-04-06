@@ -48,6 +48,20 @@ type TaskResponse {
   task: Task
 }
 
+type SignUpResponse {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+  message: String!
+}
+
+type SignInResponse {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+  isSignedIn: Boolean!
+}
+
 type Query {
   findAllTask: TaskList!
   findOneTask(id: String!): Task!
@@ -60,9 +74,11 @@ type Mutation {
   updateTask(updateTaskInput: UpdateTaskInput!): Task!
   removeTask(id: String!): Task!
   removeAllTask: TaskResponse!
-  createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): User!
+  signUp(signUpInput: SignUpInput!): SignUpResponse!
+  signUpAdmin(signUpInput: SignUpInput!): SignUpResponse!
+  signIn(signInInput: SignInInput!): SignInResponse!
 }
 
 input CreateTaskInput {
@@ -76,13 +92,19 @@ input UpdateTaskInput {
   id: String!
 }
 
-input CreateUserInput {
-  username: String!
-  role: Role
-}
-
 input UpdateUserInput {
   username: String
+  hashedassword: String
   role: Role
   id: String!
+}
+
+input SignUpInput {
+  username: String!
+  password: String!
+}
+
+input SignInInput {
+  username: String!
+  password: String!
 }
