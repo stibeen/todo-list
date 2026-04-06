@@ -2,8 +2,8 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { User, UserList } from './entities/user.entity';
 import { UpdateUserInput } from './dto/update-user.input';
-import { Role } from 'src/generated/enums';
 import { Roles } from 'src/common/decorator/roles.decorator';
+import { Role } from 'src/generated/enums';
 
 @Resolver(() => User)
 export class UserResolver {
